@@ -1,5 +1,6 @@
 import React from "react";
 import {Movies} from '../components/Movies';
+import {Search} from '../components/Search';
 import {Preloader} from '../components/Preloader';
 
 class Main extends React.Component {
@@ -12,12 +13,18 @@ class Main extends React.Component {
             .then(jsonContent => this.setState({movies: jsonContent.Search}))
     }
 
+    searchMovies = (searchText) => {
+        fetch(`http://www.omdbapi.com/?apikey=7e2ac28f&s=${searchText}`)
+            .then(response => response.json())
+            .then(jsonContent => this.setState({movies: jsonContent.Search}))
+    }
+
     render() {
         const {movies} = this.state;
         return <main className="container content">
+            <Search searchMovies={this.searchMovies}/>
             {/* разобраться, почему здесь не работает иф и как правильно его использовать */}
             { movies.length ? (<Movies movies={this.state.movies}/>) : (<Preloader/>) } 
-            
         </main>
     }
 }
